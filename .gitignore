@@ -1,0 +1,4 @@
+.DS_Store
+gcp_account.json
+.terraform
+terraform.tfstate.backup
