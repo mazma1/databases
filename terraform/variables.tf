@@ -2,6 +2,14 @@ variable "image" {
   default = "ubuntu-1604-xenial-v20181004"
 }
 
+variable "master_image" {
+  default = "master"
+}
+
+variable "slave_image" {
+  default = "slave"
+}
+
 variable "machine_type" {
   default = "f1-micro"
 }

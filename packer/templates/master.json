@@ -11,7 +11,8 @@
       "source_image": "ubuntu-1604-xenial-v20181004",
       "zone": "us-central1-b",
       "ssh_username": "packer",
-      "image_name": "master-base-image-{{timestamp}}"
+      "image_name": "master-base-image-{{timestamp}}",
+      "image_family": "master"
     }
   ],
 

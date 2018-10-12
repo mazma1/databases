@@ -6,7 +6,7 @@ resource "google_compute_instance" "db01_instance" {
   tags         = ["private"]
   boot_disk {
     initialize_params {
-      image = "${var.image}"
+      image = "${var.master_image}"
     }
   }
   network_interface {
