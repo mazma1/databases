@@ -1,0 +1,26 @@
+{
+  "variables": {
+    "project_id": "{{ env `PROJECT_ID` }}"
+  },
+
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "../gcp_account.json",
+      "project_id": "{{ user `project_id` }}",
+      "source_image": "ubuntu-1604-xenial-v20181004",
+      "zone": "us-central1-b",
+      "ssh_username": "packer",
+      "image_name": "master-base-image-{{timestamp}}"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/master_config.sh"
+      ]
+    }
+  ]
+}
