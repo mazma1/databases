@@ -19,6 +19,8 @@ update_packages() {
   sudo apt update -y
   sudo apt-get upgrade -y
 
+  sudo apt-get install bc
+
   echo 'Successfully updated packages.'
 }
 
@@ -31,6 +33,10 @@ install_mysql() {
   sudo apt-get install mysql-server -y
 
   echo 'Successfully installed MySQL.'
+}
+
+add_master_to_known_hosts() {
+
 }
 
 main() {

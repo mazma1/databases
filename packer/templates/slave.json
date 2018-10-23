@@ -18,6 +18,11 @@
 
   "provisioners": [
     {
+      "type": "file",
+      "source": "../scripts/slave_replication.sh",
+      "destination": "/tmp/slave_replication.sh"
+    },
+    {
       "type": "shell",
       "scripts": [
         "scripts/slave_config.sh"
