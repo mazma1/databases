@@ -35,9 +35,6 @@ install_mysql() {
   echo 'Successfully installed MySQL.'
 }
 
-add_master_to_known_hosts() {
-
-}
 
 main() {
   update_packages

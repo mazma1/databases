@@ -45,10 +45,46 @@ setup_slave_replication() {
   echo 'Successfully set up slave replication'
 }
 
+restore_data_from_master_dump() {
+  echo "About to restore data from dump..."
+
+  sudo mysql -uroot -p"${SQL_ROOT_PASSWORD}" < masterdump.sql
+
+  echo "Successfully restored data from dump"
+}
+
+start_slave() {
+  echo 'About to start slave...'
+
+  sudo mysql -uroot  -p"${SQL_ROOT_PASSWORD}" -Bse "start slave;"
+
+  echo 'Successfully started slave'
+}
+
+check_replication_status() {
+  echo 'About to check replication status...'
+
+  # Wait for slave to get started and have the correct status
+	sleep 2
+
+	# Check if replication status is OK
+	SLAVE_OK=$(sudo mysql -uroot -p"${SQL_ROOT_PASSWORD}" -e "SHOW SLAVE STATUS\G;" | grep 'Waiting for master')
+	if [ -z "$SLAVE_OK" ]; then
+		echo "ERROR! Wrong slave IO state."
+	else
+		echo "Slave IO state OK"
+	fi
+
+  echo 'Completed check for replication status'
+}
+
 main() {
   set_vars
   update_config_file
   setup_slave_replication
+  restore_data_from_master_dump
+  start_slave
+  check_replication_status
 }
 
 main "$@"

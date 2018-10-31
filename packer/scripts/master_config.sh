@@ -69,21 +69,12 @@ create_test_data() {
   echo 'Successfully created replication test data'
 }
 
-create_data_snapshot() {
-  echo 'About to take snapshot of existing data....'
-
-  sudo mysqldump -uroot -p"${SQL_ROOT_PASSWORD}" --all-databases --master-data > masterdump.sql
-
-  echo 'Successfully took snapshot of data'
-}
-
 main() {
   update_packages
   install_mysql
   update_config_file
   create_replication_user
   create_test_data
-  create_data_snapshot
 }
 
 main "$@"
