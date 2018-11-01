@@ -40,7 +40,7 @@ install_mysql() {
 update_config_file() {
   echo 'Updating MySQL config in /etc/mysql/mysql.conf.d/mysqld.cnf....'
   
-  #update bind address, server-id and log_bin values with perl find and replace
+  #update bind address, server-id and log_bin values
   sudo sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" $CONFIG_FILE
   sudo sed -i '/server-id/s/^#//g' $CONFIG_FILE
   sudo sed -i '/log_bin/s/^#//g' $CONFIG_FILE
