@@ -22,7 +22,11 @@ set_vars() {
 update_config_file() {
   echo "Updating MySQL config in $CONFIG_FILE...."
 
-  SERVER_ID=$( echo $RANDOM % 10 + 2 | bc )
+  if [ $SLAVE_NAME = "db02" ]; then
+		SERVER_ID=2
+	else
+		SERVER_ID=3
+	fi
 
   echo $SERVER_ID
   

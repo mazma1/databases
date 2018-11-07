@@ -6,8 +6,16 @@ variable "master_image" {
   default = "master"
 }
 
-variable "slave_image" {
-  default = "slave"
+variable "slave1_image" {
+  default = "slave-one"
+}
+
+variable "slave2_image" {
+  default = "slave-two"
+}
+
+variable "ha_proxy_image" {
+  default = "ha-proxy"
 }
 
 variable "machine_type" {

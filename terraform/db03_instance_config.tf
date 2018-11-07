@@ -2,11 +2,11 @@
 resource "google_compute_instance" "db03_instance" {
   name         = "db03"
   machine_type = "${var.machine_type}"
-  zone         = "us-central1-a"
+  zone         = "us-central1-c"
   tags         = ["private"]
   boot_disk {
     initialize_params {
-      image = "${var.slave_image}"
+      image = "${var.slave2_image}"
     }
   }
   network_interface {

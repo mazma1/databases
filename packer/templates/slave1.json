@@ -1,6 +1,7 @@
 {
   "variables": {
-    "project_id": "{{ env `PROJECT_ID` }}"
+    "project_id": "{{ env `PROJECT_ID` }}",
+    "server_id1": "{{ env `SLAVE_ONE_ID` }}"
   },
 
   "builders": [
@@ -11,8 +12,8 @@
       "source_image": "ubuntu-1604-xenial-v20181004",
       "zone": "us-central1-b",
       "ssh_username": "packer",
-      "image_name": "slave-base-image-{{timestamp}}",
-      "image_family": "slave"
+      "image_name": "slave1-base-image-{{timestamp}}",
+      "image_family": "slave-one"
     }
   ],
 

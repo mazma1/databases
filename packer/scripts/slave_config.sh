@@ -19,8 +19,6 @@ update_packages() {
   sudo apt update -y
   sudo apt-get upgrade -y
 
-  sudo apt-get install bc
-
   echo 'Successfully updated packages.'
 }
 
