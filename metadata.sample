@@ -1,5 +1,7 @@
-KEY                | VALUE
--------------------|-----------------
-slave_password     | password
-slave_username     | repl_user
-sql_root_password	 | password
+KEY                        | VALUE
+---------------------------|---------------------------
+slave_password             | password
+slave_username             | repl_user
+sql_root_password	         | password
+haproxy_sql_root_password	 | haproxy
+
