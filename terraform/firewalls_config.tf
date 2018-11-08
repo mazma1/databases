@@ -64,3 +64,16 @@ resource "google_compute_firewall" "allow_all_outbound" {
   }
   destination_ranges = ["0.0.0.0/0"]
 }
+
+resource "google_compute_firewall" "inbound_http" {
+  name          = "inbound-http"
+  description   = "Allow inbound HTTP request"
+  network       = "${google_compute_network.demo-vpc.self_link}"
+  allow {
+    protocol    = "tcp"
+    ports       = ["80", "8080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
+}

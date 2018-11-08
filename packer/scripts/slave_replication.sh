@@ -65,6 +65,16 @@ start_slave() {
   echo 'Successfully started slave'
 }
 
+### refresh users' privileges in the slave servers so that the priveleges of ###
+### the HAProxy users replicated onto the slaves can be effected.            ###
+refresh_users_priveleges() {
+  echo 'About to refresh privileges for HAProxy users...'
+
+  sudo mysql -u "root" -p"${SQL_ROOT_PASSWORD}" -Bse "flush privileges;"
+
+  echo 'Done refreshing privileges for HAProxy users.'
+}
+
 check_replication_status() {
   echo 'About to check replication status...'
 
@@ -88,6 +98,7 @@ main() {
   setup_slave_replication
   restore_data_from_master_dump
   start_slave
+  refresh_users_priveleges
   check_replication_status
 }
 

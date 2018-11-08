@@ -9,23 +9,18 @@
       "account_file": "../gcp_account.json",
       "project_id": "{{ user `project_id` }}",
       "source_image": "ubuntu-1604-xenial-v20181004",
-      "zone": "us-central1-b",
+      "zone": "us-central1-a",
       "ssh_username": "packer",
-      "image_name": "master-base-image-{{timestamp}}",
-      "image_family": "master"
+      "image_name": "haproxy-base-image-{{timestamp}}",
+      "image_family": "ha-proxy"
     }
   ],
 
   "provisioners": [
     {
-      "type": "file",
-      "source": "./scripts/create_haproxy_users.sh",
-      "destination": "/home/packer/create_haproxy_users.sh"
-    },
-    {
       "type": "shell",
       "scripts": [
-        "scripts/master_config.sh"
+        "scripts/ha_proxy.sh"
       ]
     }
   ]
