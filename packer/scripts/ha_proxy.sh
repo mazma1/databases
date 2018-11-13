@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# script to install mysql-server and HAProxy on server's base image
+# script to install mysql-server and HAProxy on server
 
 # exit when a command fails
 set -o errexit
@@ -34,17 +34,41 @@ install_mysql() {
 }
 
 install_haproxy() {
-  echo 'About to install HAProxy....'
-  sudo apt install policycoreutils -y
+  echo 'About to install and enable HAProxy....'
+
   sudo apt-get install haproxy -y
+
+  # enable HAProxy...
+  echo 'ENABLED=1' | sudo tee -a /etc/default/haproxy;
+
   echo 'Successfully installed HAProxy.'
 
   echo 'About to back up existing HAProxy config file...'
   sudo cp /etc/haproxy/haproxy.cfg{,.original}
   echo 'Done backing up existing config file.'
 
-  sudo sed -i "s/.*modei*/# mode http/" /etc/haproxy/haproxy.cfg
+  sudo sed -i "s/.*mode*/# mode http/" /etc/haproxy/haproxy.cfg
   sudo sed -i "s/.*httplog*/# option httplog/" /etc/haproxy/haproxy.cfg
+}
+
+turn_selinux_boolean_on() {
+  echo 'About to turn on the haproxy_connect_any boolean....'
+
+  ######## Skip post-install configuration step for policycoreutils, just install package ###########
+  ######## Was added to fix maintainer's postinstall script failure for policycoreutils: ############
+  ######## subprocess installed post-installation script returned error exit status 1 ###############
+  ######## Errors were encountered while processing: selinux-policy-default E: Sub-process /usr/bin/dpkg returned an error code (1) #########
+  ######## https://serverfault.com/questions/347937/how-do-i-ask-apt-get-to-skip-all-post-install-configuration-steps #######################
+  sudo su
+  echo exit 101 > /usr/sbin/policy-rc.d
+  chmod +x /usr/sbin/policy-rc.d
+  apt-get install policycoreutils -y
+  rm -f /usr/sbin/policy-rc.d
+
+  # turn on the haproxy_connect_any boolean so haproxy can connect to all TCP ports
+  setsebool -P haproxy_connect_any on
+
+  echo 'HAProxy can now connect to all TCP ports. Scipt completed successfully!'
 }
 
 
@@ -52,6 +76,7 @@ main() {
   update_packages
   install_mysql
   install_haproxy
+  turn_selinux_boolean_on
 }
 
 main "$@"

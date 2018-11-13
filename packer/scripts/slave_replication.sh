@@ -22,13 +22,12 @@ set_vars() {
 update_config_file() {
   echo "Updating MySQL config in $CONFIG_FILE...."
 
+  #specify the server_id of each slave
   if [ $SLAVE_NAME = "db02" ]; then
 		SERVER_ID=2
 	else
 		SERVER_ID=3
 	fi
-
-  echo $SERVER_ID
   
   #update bind address and server-id values
   sudo sed -i "s/.*bind-address.*/bind-address = $INSTANCE_IP/" $CONFIG_FILE

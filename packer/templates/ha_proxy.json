@@ -18,10 +18,9 @@
 
   "provisioners": [
     {
-      "type": "shell",
-      "scripts": [
-        "scripts/ha_proxy.sh"
-      ]
+      "type": "file",
+      "source": "./scripts/ha_proxy.sh",
+      "destination": "/home/packer/ha_proxy.sh"
     }
   ]
 }

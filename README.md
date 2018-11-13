@@ -212,31 +212,56 @@ Also when running the command to copy the dump file to the slave, be sure to upd
 
 
 ## Load Balancing
-At this point, the database cluster should be up, with replication correctly set up. What's left is to update the configuration of the load balancer to begin to listen for requests, and distribute traffic to the servers based on algorithm specified in the config.  The following configurations has been done for the HAProxy server (via the custom base image):
+At this point, the database cluster should be up, with replication correctly set up. What's left is to update the configuration of the load balancer to begin to listen for requests, and distribute traffic to the servers based on algorithm specified in the config. 
 
-- MySQL installed
-- HAProxy installed and enabled. Executing `sudo service haproxy status` should show that it is active.
-- A backup of the existing configuration file taken:
-
-    - Working copy: `/etc/haproxy/haproxy.cfg` 
-    - Backup file: `/etc/haproxy/haproxy.cfg.original` 
-
-    If you ever need to restore the original config file, always comment out line `23` and `24`. This was done programatically in the base image:
-
-    ![haproxy config working copy](img/haproxy_config_working_copy.png?raw=true "haproxy config working copy")
-    
-
-### Complete the Load Balancing Setup
+### Set Up HAProxy Server
 1. `SSH` into HAProxy's server. This is a public facing instance with a public IP so you can connect directly using the SSH shortcut on the VM instances page (on Google Cloud)
 
-2. Log in to the home directory of the root user:
+2. Log in as the user `packer` and execute the setup script in the home directory:
+    ```
+    sudo su - packer
+
+    chmod +x ha_proxy.sh
+
+    ./ha_proxy.sh
+    ```
+
+    The setup script:
+    - Installs MySQL
+    - Installs and enables HAProxy
+    - Creates a copy of the existing configuration file as a backup:
+        - Working copy: `/etc/haproxy/haproxy.cfg` 
+        - Backup copy: `/etc/haproxy/haproxy.cfg.original` 
+
+        If you ever need to restore the original config file, always comment out line `23` and `24`. This was done programatically via the setup script:
+
+        ![haproxy config working copy](img/haproxy_config_working_copy.png?raw=true "haproxy config working copy")
+
+    One error I encountered while testing the script was this:
+
+    ```
+    ......
+
+    About to install MySQL....
+    E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+    E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+    ```
+    This error usually means that there is already an apt process running. I got past this by waiting a few minutes before executing the script again.
+
+    If the script executes successfully, run `sudo service haproxy status` to ensure that HAProxy is active and running.
+
+    ![active haproxy](img/active_haproxy.png?raw=true "active haproxy")
+    
+3. Switch to the home directory of the root user:
     ```
     sudo su
 
     cd ~
     ```
 
-3. Open the working copy of the config file and add the following blocks of configuration:
+    Open the working copy of the config file using vim and add the following blocks of configuration:
+
+    `vi /etc/haproxy/haproxy.cfg`
 
     ```
     listen mysql-cluster
